@@ -4,6 +4,7 @@ import cors from "cors";
 import { connectDb } from "./config/db.js";
 import UserRegister from "./routes/user.js";
 import LoginUser from "./routes/login.js";
+import ProductRouter from "./routes/product.js";
 
 dotenv.config({ path: ".env" });
 
@@ -23,6 +24,9 @@ app.use("/api/user", UserRegister);
 
 // Login User
 app.use("/api/user", LoginUser);
+
+// Product
+app.use("/api/product", ProductRouter);
 
 app.get("/", (req, res) => {
   res.json({

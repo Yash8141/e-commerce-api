@@ -1,3 +1,10 @@
 Registered User
 Email: johnwick12@gmail.com
 Password: Admin@123
+
+
+JWT_SECRET= openssl rand -base64 32
+
+findByIdAndDelete = give whole object in response 
+deleteOne = In response it gives "acknowledged": true,
+        "deletedCount": 1

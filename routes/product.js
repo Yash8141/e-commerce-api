@@ -24,4 +24,5 @@ router.put("/:id",AuthToken, updateProduct)
 
 // Delete product by id
 router.delete("/:id",AuthToken,deleteProduct)
+
 export default router;

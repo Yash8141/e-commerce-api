@@ -1,27 +1,20 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _express = _interopRequireDefault(require("express"));
-var _product = require("../controllers/product.js");
-var _auth = _interopRequireDefault(require("../middleware/auth.js"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const router = _express.default.Router();
+import express from "express";
+import { addProduct, deleteProduct, getAllProducts, getProductById, updateProduct } from "../controllers/product.js";
+import AuthToken from "../middleware/auth.js";
+const router = express.Router();
 
 // Add product
-router.post("/add", _auth.default, _product.addProduct);
+router.post("/add", AuthToken, addProduct);
 
 // Get all products
-router.get("/all", _auth.default, _product.getAllProducts);
+router.get("/all", AuthToken, getAllProducts);
 
 // Get product by id
-router.get("/:id", _auth.default, _product.getProductById);
+router.get("/:id", AuthToken, getProductById);
 
 // Update product by id
-router.put("/:id", _auth.default, _product.updateProduct);
+router.put("/:id", AuthToken, updateProduct);
 
 // Delete product by id
-router.delete("/:id", _auth.default, _product.deleteProduct);
-var _default = exports.default = router;
+router.delete("/:id", AuthToken, deleteProduct);
+export default router;

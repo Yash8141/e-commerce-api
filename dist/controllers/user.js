@@ -1,15 +1,9 @@
-"use strict";
+import mongoose from "mongoose";
+import { User } from "../models/User.js";
+import bcrypt from "bcryptjs";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.toggleUserStatus = exports.register = exports.getMyUsers = exports.getAllUsers = void 0;
-var _mongoose = _interopRequireDefault(require("mongoose"));
-var _User = require("../models/User.js");
-var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // User Register
-const register = async (req, res) => {
+export const register = async (req, res) => {
   const {
     name,
     email,
@@ -41,7 +35,7 @@ const register = async (req, res) => {
     }
 
     // Check if user already exists
-    const userExists = await _User.User.findOne({
+    const userExists = await User.findOne({
       email
     });
     if (userExists) {
@@ -52,7 +46,7 @@ const register = async (req, res) => {
     }
 
     // Check if this is the first user
-    const userCount = await _User.User.countDocuments();
+    const userCount = await User.countDocuments();
     let userRole = "user";
     let userActive = false;
     let createdBy = null;
@@ -74,10 +68,10 @@ const register = async (req, res) => {
     }
 
     // Hash password
-    const hashPassword = await _bcryptjs.default.hash(password, 10);
+    const hashPassword = await bcrypt.hash(password, 10);
 
     // Create new user
-    const registerNewUser = new _User.User({
+    const registerNewUser = new User({
       name,
       email,
       password: hashPassword,
@@ -104,8 +98,7 @@ const register = async (req, res) => {
 };
 
 // Toggle User Active Status (Admin Only)
-exports.register = register;
-const toggleUserStatus = async (req, res) => {
+export const toggleUserStatus = async (req, res) => {
   const {
     id
   } = req.params;
@@ -113,7 +106,7 @@ const toggleUserStatus = async (req, res) => {
     isActive
   } = req.body;
   try {
-    if (!_mongoose.default.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         message: "Not valid ID format",
         success: false
@@ -131,7 +124,7 @@ const toggleUserStatus = async (req, res) => {
         success: false
       });
     }
-    const user = await _User.User.findById(id);
+    const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -158,8 +151,7 @@ const toggleUserStatus = async (req, res) => {
 };
 
 // Get users created by the logged-in admin
-exports.toggleUserStatus = toggleUserStatus;
-const getMyUsers = async (req, res) => {
+export const getMyUsers = async (req, res) => {
   try {
     if (req.user.role !== "admin") {
       return res.status(403).json({
@@ -169,7 +161,7 @@ const getMyUsers = async (req, res) => {
     }
 
     // Find users created by this admin
-    const users = await _User.User.find({
+    const users = await User.find({
       createdBy: req.user._id,
       role: "user"
     }).sort({
@@ -191,10 +183,9 @@ const getMyUsers = async (req, res) => {
 };
 
 // Get all users
-exports.getMyUsers = getMyUsers;
-const getAllUsers = async (req, res) => {
+export const getAllUsers = async (req, res) => {
   try {
-    const users = await _User.User.find().sort({
+    const users = await User.find().sort({
       createdAt: -1
     }).populate("createdBy", "name email role").select("-password");
     if (users && users.length > 0) {
@@ -218,4 +209,3 @@ const getAllUsers = async (req, res) => {
     });
   }
 };
-exports.getAllUsers = getAllUsers;

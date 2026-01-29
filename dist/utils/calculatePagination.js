@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.calculatePagination = void 0;
-const calculatePagination = (total, page = 1, limit = 10) => {
+export const calculatePagination = (total, page = 1, limit = 10) => {
   const currentPage = Math.max(1, parseInt(page));
   const currentLimit = Math.max(1, Math.min(50, parseInt(limit)));
   const totalPages = Math.ceil(total / currentLimit);
@@ -17,4 +11,3 @@ const calculatePagination = (total, page = 1, limit = 10) => {
     skip
   };
 };
-exports.calculatePagination = calculatePagination;

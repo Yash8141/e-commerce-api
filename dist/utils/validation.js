@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.validateProductQuery = void 0;
-const validateProductQuery = query => {
+export const validateProductQuery = query => {
   const {
     page = 1,
     limit = 10,
@@ -36,4 +30,3 @@ const validateProductQuery = query => {
     sortBy: validatedSortBy
   };
 };
-exports.validateProductQuery = validateProductQuery;

@@ -1,17 +1,11 @@
-"use strict";
+import { Product } from "../models/Product.js";
+import mongoose from "mongoose";
+import { buildSearchQuery, buildSortQuery } from "../utils/queryBuilder.js";
+import { calculatePagination } from "../utils/calculatePagination.js";
+import { validateProductQuery } from "../utils/validation.js";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.updateProduct = exports.getProductById = exports.getAllProducts = exports.deleteProduct = exports.addProduct = void 0;
-var _Product = require("../models/Product.js");
-var _mongoose = _interopRequireDefault(require("mongoose"));
-var _queryBuilder = require("../utils/queryBuilder.js");
-var _calculatePagination = require("../utils/calculatePagination.js");
-var _validation = require("../utils/validation.js");
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // Add Product
-const addProduct = async (req, res) => {
+export const addProduct = async (req, res) => {
   try {
     if (!req.body || Object.keys(req.body).length === 0) {
       return res.status(400).json({
@@ -19,7 +13,7 @@ const addProduct = async (req, res) => {
         success: false
       });
     }
-    const product = await _Product.Product.create(req.body);
+    const product = await Product.create(req.body);
     if (product) {
       return res.status(201).json({
         message: "Product added successfully",
@@ -37,10 +31,9 @@ const addProduct = async (req, res) => {
 };
 
 // Get All Products
-exports.addProduct = addProduct;
-const getAllProducts = async (req, res) => {
+export const getAllProducts = async (req, res) => {
   try {
-    const validateParams = (0, _validation.validateProductQuery)(req.query);
+    const validateParams = validateProductQuery(req.query);
     const {
       page,
       limit,
@@ -54,7 +47,7 @@ const getAllProducts = async (req, res) => {
 
     // Add search filter
     if (search) {
-      const searchQuery = (0, _queryBuilder.buildSearchQuery)(search, searchBy);
+      const searchQuery = buildSearchQuery(search, searchBy);
       query = {
         ...query,
         ...searchQuery
@@ -62,16 +55,16 @@ const getAllProducts = async (req, res) => {
     }
 
     // Build sort object
-    const sortQuery = (0, _queryBuilder.buildSortQuery)(sortDir, sortBy);
+    const sortQuery = buildSortQuery(sortDir, sortBy);
 
     // Get total count for pagination;
-    const total = await _Product.Product.countDocuments(query);
+    const total = await Product.countDocuments(query);
 
     // Calculate pagination
-    const pagination = (0, _calculatePagination.calculatePagination)(total, page, limit);
+    const pagination = calculatePagination(total, page, limit);
 
     // const validateParams = validateProductQuery()
-    const products = await _Product.Product.find(query).sort(sortQuery).skip(pagination.skip).limit(pagination.limit).lean();
+    const products = await Product.find(query).sort(sortQuery).skip(pagination.skip).limit(pagination.limit).lean();
     if (!products) {
       return res.status(404).json({
         message: "No products found",
@@ -101,19 +94,18 @@ const getAllProducts = async (req, res) => {
 };
 
 // Get Product By Id
-exports.getAllProducts = getAllProducts;
-const getProductById = async (req, res) => {
+export const getProductById = async (req, res) => {
   const {
     id
   } = req.params;
   try {
-    if (!_mongoose.default.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         message: "Invalid product ID format",
         success: false
       });
     }
-    const product = await _Product.Product.findById({
+    const product = await Product.findById({
       _id: id
     });
     if (!product) {
@@ -139,13 +131,12 @@ const getProductById = async (req, res) => {
 };
 
 // Update Product
-exports.getProductById = getProductById;
-const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res) => {
   try {
     const {
       id
     } = req.params;
-    if (!_mongoose.default.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         message: "Invalid Product ID format",
         success: false
@@ -157,7 +148,7 @@ const updateProduct = async (req, res) => {
         success: false
       });
     }
-    const product = await _Product.Product.findByIdAndUpdate(id, req.body, {
+    const product = await Product.findByIdAndUpdate(id, req.body, {
       new: true
     });
     if (!product) {
@@ -183,19 +174,18 @@ const updateProduct = async (req, res) => {
 };
 
 // Delete product
-exports.updateProduct = updateProduct;
-const deleteProduct = async (req, res) => {
+export const deleteProduct = async (req, res) => {
   try {
     const {
       id
     } = req.params;
-    if (!_mongoose.default.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
       return res.status(400).json({
         message: "Invalid Product ID format",
         success: false
       });
     }
-    const product = await _Product.Product.findByIdAndDelete({
+    const product = await Product.findByIdAndDelete({
       _id: id
     });
     if (!product) {
@@ -219,4 +209,3 @@ const deleteProduct = async (req, res) => {
     });
   }
 };
-exports.deleteProduct = deleteProduct;

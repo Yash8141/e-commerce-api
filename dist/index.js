@@ -7,6 +7,7 @@ var _db = require("./config/db.js");
 var _user = _interopRequireDefault(require("./routes/user.js"));
 var _product = _interopRequireDefault(require("./routes/product.js"));
 var _cart = _interopRequireDefault(require("./routes/cart.js"));
+var _allowedOrigin = require("./utils/allowedOrigin.js");
 function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 _dotenv.default.config({
   path: ".env"
@@ -14,7 +15,16 @@ _dotenv.default.config({
 const app = (0, _express.default)();
 const port = process.env.PORT || 3000;
 app.use(_express.default.json());
-app.use((0, _cors.default)());
+app.use((0, _cors.default)({
+  origin: function (origin, callback) {
+    if (!origin || _allowedOrigin.isAllowedOrigin.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 const mongoDbUrl = process.env.MONGODB_URL;
 const dbName = process.env.DB_NAME;
 await (0, _db.connectDb)(mongoDbUrl, dbName);

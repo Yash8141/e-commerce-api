@@ -1,14 +1,7 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.connectDb = connectDb;
-var _mongoose = _interopRequireDefault(require("mongoose"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-async function connectDb(url, dbName) {
+import mongoose from "mongoose";
+export async function connectDb(url, dbName) {
   try {
-    await _mongoose.default.connect(url, {
+    await mongoose.connect(url, {
       dbName: dbName
     });
     console.log("MongoDB Connected...");

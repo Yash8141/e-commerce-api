@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.isAllowedOrigin = isAllowedOrigin;
-function isAllowedOrigin(origin) {
+export function isAllowedOrigin(origin) {
   if (!origin) {
     return true;
   }

@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = errorHandler;
-function errorHandler(err, req, res, _next) {
+export default function errorHandler(err, req, res, _next) {
   let status = err.status || 500;
   let message = err.message || "Internal Server Error";
 

@@ -1,12 +1,7 @@
-"use strict";
+import { Cart } from "../models/Cart.js";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.userCart = exports.removeProductFromCart = exports.decreaseProductQty = exports.clearCart = exports.addToCart = void 0;
-var _Cart = require("../models/Cart.js");
 // add to cart
-const addToCart = async (req, res) => {
+export const addToCart = async (req, res) => {
   try {
     const {
       productId,
@@ -27,11 +22,11 @@ const addToCart = async (req, res) => {
       });
     }
     const userId = req.user;
-    let cart = await _Cart.Cart.findOne({
+    let cart = await Cart.findOne({
       userId
     });
     if (!cart) {
-      cart = new _Cart.Cart({
+      cart = new Cart({
         userId,
         items: []
       });
@@ -66,11 +61,10 @@ const addToCart = async (req, res) => {
 };
 
 // get cart
-exports.addToCart = addToCart;
-const userCart = async (req, res) => {
+export const userCart = async (req, res) => {
   try {
     const userId = req.user;
-    let cart = await _Cart.Cart.findOne({
+    let cart = await Cart.findOne({
       userId
     });
     if (!cart) {
@@ -96,12 +90,11 @@ const userCart = async (req, res) => {
 };
 
 // remove product from cart
-exports.userCart = userCart;
-const removeProductFromCart = async (req, res) => {
+export const removeProductFromCart = async (req, res) => {
   try {
     const productId = req.params.productId;
     const userId = req.user;
-    let cart = await _Cart.Cart.findOne({
+    let cart = await Cart.findOne({
       userId
     });
     if (!cart) {
@@ -136,15 +129,14 @@ const removeProductFromCart = async (req, res) => {
 };
 
 // clear cart
-exports.removeProductFromCart = removeProductFromCart;
-const clearCart = async (req, res) => {
+export const clearCart = async (req, res) => {
   try {
     const userId = req.user;
-    let cart = await _Cart.Cart.findOne({
+    let cart = await Cart.findOne({
       userId
     });
     if (!cart) {
-      cart = new _Cart.Cart({
+      cart = new Cart({
         items: []
       });
     } else {
@@ -165,19 +157,18 @@ const clearCart = async (req, res) => {
 };
 
 // decrease quantity from cart
-exports.clearCart = clearCart;
-const decreaseProductQty = async (req, res) => {
+export const decreaseProductQty = async (req, res) => {
   try {
     const {
       productId,
       qty
     } = req.body;
     const userId = req.user;
-    let cart = await _Cart.Cart.findOne({
+    let cart = await Cart.findOne({
       userId
     });
     if (!cart) {
-      cart = new _Cart.Cart({
+      cart = new Cart({
         userId,
         items: []
       });
@@ -224,4 +215,3 @@ const decreaseProductQty = async (req, res) => {
     });
   }
 };
-exports.decreaseProductQty = decreaseProductQty;

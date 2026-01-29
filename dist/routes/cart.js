@@ -1,27 +1,20 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-var _express = _interopRequireDefault(require("express"));
-var _cart = require("../controllers/cart.js");
-var _auth = _interopRequireDefault(require("../middleware/auth.js"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const router = _express.default.Router();
+import express from "express";
+import { addToCart, clearCart, decreaseProductQty, removeProductFromCart, userCart } from "../controllers/cart.js";
+import authenticationToken from "../middleware/auth.js";
+const router = express.Router();
 
 // add to cart
-router.post("/add", _auth.default, _cart.addToCart);
+router.post("/add", authenticationToken, addToCart);
 
 // user cart
-router.get("/user", _auth.default, _cart.userCart);
+router.get("/user", authenticationToken, userCart);
 
 // remove product from cart
-router.delete("/remove/:productId", _auth.default, _cart.removeProductFromCart);
+router.delete("/remove/:productId", authenticationToken, removeProductFromCart);
 
 // clear cart
-router.delete("/clear", _auth.default, _cart.clearCart);
+router.delete("/clear", authenticationToken, clearCart);
 
 // decreased qty
-router.post("/update-qty", _auth.default, _cart.decreaseProductQty);
-var _default = exports.default = router;
+router.post("/update-qty", authenticationToken, decreaseProductQty);
+export default router;

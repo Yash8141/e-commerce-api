@@ -1,10 +1,4 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.buildSortQuery = exports.buildSearchQuery = void 0;
-const buildSearchQuery = (search, searchBy = 'title') => {
+export const buildSearchQuery = (search, searchBy = 'title') => {
   if (!search) return {};
   const validSearchFields = ["title", "category"];
   const searchField = validSearchFields.includes(searchBy) ? searchBy : "title";
@@ -15,8 +9,7 @@ const buildSearchQuery = (search, searchBy = 'title') => {
     }
   };
 };
-exports.buildSearchQuery = buildSearchQuery;
-const buildSortQuery = (sortDir = "desc", sortBy = "createdAt") => {
+export const buildSortQuery = (sortDir = "desc", sortBy = "createdAt") => {
   const validSortDirections = ["asc", "desc"];
   const validSortFields = ["title", "price", "category", "createdAt", "updateAt"];
   const sortDirection = validSortDirections.includes(sortDir.toLowerCase()) ? sortDir.toLowerCase() : "desc";
@@ -25,4 +18,3 @@ const buildSortQuery = (sortDir = "desc", sortBy = "createdAt") => {
     [field]: sortDirection === "asc" ? 1 : -1
   };
 };
-exports.buildSortQuery = buildSortQuery;

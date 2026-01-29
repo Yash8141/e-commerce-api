@@ -1,15 +1,9 @@
-"use strict";
+import { User } from "../models/User.js";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.login = void 0;
-var _User = require("../models/User.js");
-var _bcryptjs = _interopRequireDefault(require("bcryptjs"));
-var _jsonwebtoken = _interopRequireDefault(require("jsonwebtoken"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
 // User Login
-const login = async (req, res) => {
+export const login = async (req, res) => {
   const {
     email,
     password
@@ -27,7 +21,7 @@ const login = async (req, res) => {
         success: false
       });
     }
-    const findEmail = await _User.User.findOne({
+    const findEmail = await User.findOne({
       email
     });
     if (!findEmail) {
@@ -36,14 +30,14 @@ const login = async (req, res) => {
         success: false
       });
     }
-    const validPassword = await _bcryptjs.default.compare(password, findEmail.password);
+    const validPassword = await bcrypt.compare(password, findEmail.password);
     if (!validPassword) {
       return res.status(400).json({
         message: "Invalid password",
         success: false
       });
     }
-    const token = _jsonwebtoken.default.sign({
+    const token = jwt.sign({
       user_id: findEmail._id
     }, process.env.JWT_SECRET, {
       expiresIn: "1d"
@@ -71,4 +65,3 @@ const login = async (req, res) => {
     });
   }
 };
-exports.login = login;

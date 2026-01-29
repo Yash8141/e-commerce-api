@@ -1,12 +1,5 @@
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.User = void 0;
-var _mongoose = _interopRequireDefault(require("mongoose"));
-function _interopRequireDefault(e) { return e && e.__esModule ? e : { default: e }; }
-const userSchema = new _mongoose.default.Schema({
+import mongoose from "mongoose";
+const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true
@@ -29,10 +22,10 @@ const userSchema = new _mongoose.default.Schema({
     default: false
   },
   createdBy: {
-    type: _mongoose.default.Schema.Types.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: "User"
   }
 }, {
   timestamps: true
 });
-const User = exports.User = _mongoose.default.model("User", userSchema);
+export const User = mongoose.model("User", userSchema);

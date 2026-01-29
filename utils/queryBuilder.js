@@ -3,7 +3,6 @@ export const buildSearchQuery = (search, searchBy = 'title') => {
 
   const validSearchFields = ["title","category"];
   const searchField = validSearchFields.includes(searchBy) ? searchBy : "title";
-    console.log('search field',searchField)
   return {
     [searchField]: { $regex: search, $options: "i" },
   };
